@@ -11,11 +11,12 @@ src="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture.jp
   <li>Activez/désactivez simplement une combinaison à l'aide d'un simple clic sur un bouton. (<a href="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture_bouton_oui.jpg?raw=true"><img alt="Screenshot 1" src="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture_bouton_oui.jpg?raw=true" height="20px"></a>
 <a href="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture_bouton_non.jpg?raw=true"><img alt="Screenshot 1"
 src="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture_bouton_non.jpg?raw=true" height="20px"></a>)</li>
+  <li>Les combinaisons avec lesquelles vous jouez ont des doubles ? Pas de problème, il suffit de cocher la case.</li>
 </ul>
 
 <h2>À venir (dans l'ordre d'apparition prévu)</h2>
 <ul>
-  <li>Les doubles dans les combinaisons pris en charge.</li>
   <li>Les couleurs modifiables.</li>
+  <li>Des scores mieux comptabilisé (pour le moment, c'est un peu au petit bonheur la chance 😉).</l>
   <li>L'ajout de colonnes.</li>
 </ul>
