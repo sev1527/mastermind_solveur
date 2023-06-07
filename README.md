@@ -12,3 +12,10 @@ src="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture.jp
 <a href="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture_bouton_non.jpg?raw=true"><img alt="Screenshot 1"
 src="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture_bouton_non.jpg?raw=true" height="20px"></a>)</li>
 </ul>
+
+<h2>À venir (dans l'ordre d'apparition prévu)</h2>
+<ul>
+  <li>Les doubles dans les combinaisons pris en charge.</li>
+  <li>Les couleurs modifiables.</li>
+  <li>L'ajout de colonnes.</li>
+</ul>
