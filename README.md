@@ -1,4 +1,4 @@
-<h1>mastermind_solveur</h1>
+<h1><a href="https://github.com/sev1527/mastermind_solveur/blob/main/programme/icone.ico?raw=true"><img alt="Screenshot 1" src="https://github.com/sev1527/mastermind_solveur/blob/main/programme/icone.ico?raw=true" height="30px"></a> mastermind_solveur</h1>
 Un solveur de mastermind.
 
 <h2>Grâce à ce programme, résolvez une combinaison de mastermind en quelques esssais ⏱😉</h2>  
