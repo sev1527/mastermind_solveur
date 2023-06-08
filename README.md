@@ -2,16 +2,16 @@
 Un solveur de mastermind.
 
 <h2>Grâce à ce programme, résolvez une combinaison de mastermind en quelques esssais ⏱😉</h2>  
-<a href="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture.jpg?raw=true"><img width=400 alt="Screenshot 1"
+<a href="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture.jpg?raw=true"><img width=400 alt="Capture d'écran de la page principale du programme."
 src="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture.jpg?raw=true"></a>
 
 <h2>Fonctionnalités</h2>
 <ul>
   <li>Sélectionnez une couleur et collez-la simplement en cliquant sur la case de destination.</li>
-  <li>Activez/désactivez simplement une combinaison à l'aide d'un simple clic sur un bouton. <a href="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture_bouton.gif?raw=true"><img alt="animation" src="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture_bouton.gif?raw=true" height="20px"></a>
+  <li>Activez/désactivez simplement une combinaison à l'aide d'un simple clic sur un bouton. <img alt="animation" src="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture_bouton.gif?raw=true" height="20px">
 </li>
-  <li>Les combinaisons avec lesquelles vous jouez ont des doubles ? Pas de problème, il suffit de cocher la case. <a href="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture_doublons.gif?raw=true"><img alt="animation"
-src="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture_doublons.gif?raw=true" height="15px"></a></li>
+  <li>Les combinaisons avec lesquelles vous jouez ont des doubles ? Pas de problème, il suffit de cocher la case. <img alt="animation"
+src="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture_doublons.gif?raw=true" height="15px"></li>
 </ul>
 
 <h2>À venir (dans l'ordre d'apparition prévu)</h2>
