@@ -18,5 +18,5 @@ src="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture_do
 <ul>
   <li>Les couleurs modifiables.</li>
   <li>Des scores mieux comptabilisé (pour le moment, c'est un peu au petit bonheur la chance 😉).</l>
-  <li>L'ajout de colonnes.</li>
+  <li>L'ajout ou la suppression de colonnes possibles en cliquant sur un bouton.</li>
 </ul>
