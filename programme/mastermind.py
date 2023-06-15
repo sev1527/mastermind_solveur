@@ -1,7 +1,11 @@
 from tkinter import Tk, Button, Label, Frame, Checkbutton, IntVar
 from tkinter.colorchooser import askcolor
-from tkinter.messagebox import showwarning
+from tkinter.messagebox import showwarning, askyesno, showinfo
+import webbrowser
+from requests import get
 from copy import deepcopy
+
+VERSION = "1.2"
 
 combinaisons = []
 combinaisons_double = []
@@ -98,7 +102,11 @@ class Fen(Tk):
         super().__init__()
         self.title("Solveur de Mastermind")
         
-        Label(self, text="Solveur de Mastermind", font="Arial 18").pack()
+        f = Frame(self)
+        f.pack()
+        Label(f, text=f"Solveur de Mastermind {VERSION}  ", font="Arial 18").pack(side="left")
+        Button(f, text="🗘", command=self.mise_a_jour).pack(side="left")
+        Button(f, text="ⓘ", command=self.a_propos).pack(side="left")
         self.boutons = []
         self.but_f = Frame(self)
         self.but_f.pack()
@@ -144,13 +152,40 @@ class Fen(Tk):
         self.affiche = Label(self)
         self.affiche.pack()
         
+        self.after(1000, fonction(self.mise_a_jour, False))
+        
+    def a_propos(self):
+        if askyesno("À propos du solveur de Mastermind", f"Ce solveur de mastermind a été créé par sev1527. Sa version actuelle est {VERSION}.\nSouhaitez-vous ouvrir le dépôt GitHub pour en apprendre plus ?"):
+            webbrowser.open("https://github.com/sev1527/mastermind_solveur")
+        
+    def mise_a_jour(self, manuel=True):
+        r = get("https://github.com/sev1527/mastermind_solveur/raw/main/donn%C3%A9es.json")
+        json = r.json()
+        print(json)
+        if VERSION < json["update"]["last"]:
+            if askyesno("Mise à jour", f"""La version {json["update"]["last"]} est disponible (vous avez {VERSION}).
+Souhaitez-vous ouvrir le dépôt GitHub pour l'installer ?"""):
+                webbrowser.open("https://github.com/sev1527/mastermind_solveur")
+        elif manuel:
+            showinfo("Mise à jour", "Aucune mise à jour disponible.")
+        
     def bouton_couleur_reception(self, l, nb):
-        self.boutons[l][nb].config(bg=couleurs[self.id_couleur])
+        c = self.boutons_couleur[self.id_couleur]["bg"]
+        self.boutons[l][nb].config(bg=c)
     
     def bouton_couleur_modification(self):
         showwarning("Attention", "Cette fonction ne marche pas encore !")
         c = askcolor(color=couleurs[self.id_couleur])[1]
+        tbg = (i["bg"] for i in self.boutons_couleur)
+        if c in tbg:
+            showwarning("Attention", "Une couleur ne peut pas être présente deux fois")
+            return
+        ancienne = self.boutons_couleur[self.id_couleur]["bg"]
         self.boutons_couleur[self.id_couleur].config(bg=c)
+        for l in self.boutons:
+            for b in l:
+                if b["bg"] == ancienne:
+                    b.config(bg=c)
     
     def bouton_couleur_selection(self, nb):
         self.boutons_couleur[self.id_couleur].config(relief="raised")
