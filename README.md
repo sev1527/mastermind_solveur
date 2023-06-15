@@ -14,6 +14,12 @@ src="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture.jp
 src="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture_doublons.gif?raw=true" height="15px"></li>
 </ul>
 
+<h2>Prérequis</h2>
+<ul>
+  <li>Python 3 <a href="https://www.python.org/downloads/">installer</a></li>
+  <li>Le module <code>requests</code> installable avec <code>pip install requests</code> <a href="https://pypi.org/project/requests2/">plus</a></li>
+</ul>
+
 <h2>À venir (dans l'ordre d'apparition prévu)</h2>
 <ul>
   <li>Les couleurs modifiables.</li>
