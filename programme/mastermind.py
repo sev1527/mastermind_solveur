@@ -224,10 +224,11 @@ class Fen(Tk):
             r = get("https://github.com/sev1527/mastermind_solveur/raw/main/donn%C3%A9es.json")
             json = r.json()
             print(json)
+            n = "\n"
             if VERSION < json["update"]["last"]:
                 if askyesno("Mise à jour", f"""La version {json["update"]["last"]} est disponible (vous avez {VERSION}).
 Nouveautés :
-{json["update"]["new"]}
+{''.join(f'- {i}{n}' for i in json["update"]["new"])}
 
 Souhaitez-vous ouvrir le dépôt GitHub pour l'installer ?"""):
                     webbrowser.open("https://github.com/sev1527/mastermind_solveur")
