@@ -1,7 +1,7 @@
 <h1><a href="https://github.com/sev1527/mastermind_solveur/blob/main/programme/icone.ico?raw=true"><img alt="Screenshot 1" src="https://github.com/sev1527/mastermind_solveur/blob/main/programme/icone.ico?raw=true" height="30px"></a> mastermind_solveur</h1>
 Un solveur de mastermind.
 
-<h2>Grâce à ce programme, résolvez une combinaison de mastermind en quelques esssais ⏱😉</h2>  
+<h2>Grâce à ce programme, résolvez une combinaison de mastermind en quelques essais ⏱😉</h2>  
 <a href="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture.jpg?raw=true"><img width=400 alt="Capture d'écran de la page principale du programme."
 src="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture.jpg?raw=true"></a>
 
@@ -12,6 +12,7 @@ src="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture.jp
 </li>
   <li>Les combinaisons avec lesquelles vous jouez ont des doubles ? Pas de problème, il suffit de cocher la case. <img alt="animation"
 src="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture_doublons.gif?raw=true" height="15px"></li>
+  <li>L'application recherche automatiquement les mises à jour et vous prévient quand elles sont disponnibles</li>
 </ul>
 
 <h2>Prérequis</h2>
