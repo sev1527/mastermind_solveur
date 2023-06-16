@@ -1,34 +1,43 @@
-from tkinter import Tk, Button, Label, Frame, Checkbutton, IntVar
+# -*- coding: utf-8 -*-
+"""
+Une fenêtre graphique pour résoudre les combinaisons de Mastermind.
+Créé par sev1527.
+Dépot GitHub : https://github.com/sev1527/mastermind_solveur
+"""
+from tkinter import Tk, Button, Label, Frame, Checkbutton, IntVar, Toplevel
 from tkinter.colorchooser import askcolor
 from tkinter.messagebox import showwarning, askyesno, showinfo
 import webbrowser
 from requests import get
 from copy import deepcopy
 
-VERSION = "1.2"
+VERSION = "1.2.1"
 
 combinaisons = []
 combinaisons_double = []
 couleurs = ["#e40000", "#0067ff", "#909090", "#00df2d", "#ff21d4", "#ffffff", "#ff8a00", "#f4f700"]
+items = list(range(8))
 
 def double(liste):
+    """
+    Y a-t-il un double dans la liste ?
+    """
     for i in range(len(liste)):
         l = liste[0:i]+liste[i+1:len(liste)]
         if liste[i] in l:
             return True
     return False
 
-for i1 in couleurs:
-    for i2 in couleurs:
-        for i3 in couleurs:
-            for i4 in couleurs:
+for i1 in items:
+    for i2 in items:
+        for i3 in items:
+            for i4 in items:
                 comb = [i1, i2, i3, i4]
                 combinaisons_double.append(comb)
                 if not double(comb):
                     combinaisons.append(comb)
 
-
-def noter(item, liste):
+def _noter(item, liste):
     n = 0
     for i in liste:
         for c in range(len(item)):
@@ -39,6 +48,9 @@ def noter(item, liste):
     return n
 
 def calculer(liste, double):
+    """
+    Calculer toutes les possibilités possibles avec les contraintes indiquée.
+    """
     if double:
         liste_utilise = combinaisons_double
     else:
@@ -51,7 +63,7 @@ def calculer(liste, double):
             nb_bons = 0
             decalage = 0
             copie_combinaison = deepcopy(combinaison)
-            copie_entree = deepcopy(entree)
+            copie_entree = deepcopy(entree)[0:len(combinaison)] # On ne prends que les chiffres de la combinaison.
             for i in range(len(copie_combinaison)):
                 if copie_entree[i-decalage] == copie_combinaison[i-decalage]:
                     del copie_combinaison[i-decalage]
@@ -72,11 +84,14 @@ def calculer(liste, double):
 
     nret = []
     for r in range(len(ret)):
-        n = noter(ret[r], ret)
+        n = _noter(ret[r], ret)
         nret.append(ret[r]+[n])
     return trier(nret, -1, False)
 
 def trier(liste, key, croissant=True):
+    """
+    Trie les items de la liste.
+    """
     n = []
     for i in liste:
         f = True
@@ -92,10 +107,50 @@ def trier(liste, key, croissant=True):
     return list(reversed(n))
 
 def fonction(f, *args, **kwargs):
+    """
+    Transforme une fonction en lambda.
+    """
     def a():
         f(*args, **kwargs)
     return a
 
+
+class infoBulle(Toplevel):
+    """
+    Inspiré de https://www.developpez.net/forums/d241112/autres-langages/python/gui/tkinter/info-bulle-tkinter/#post_1542643.
+    """
+    def __init__(self, master, texte='', temps=1000):
+        super().__init__(master, bd=1, bg='black')
+        self.tps = temps
+        self.master = master
+        self.withdraw()
+        self.overrideredirect(1)
+        self.transient()     
+        l = Label(self, text=texte, bg="ghost white", justify='left')
+        l.update_idletasks()
+        l.pack()
+        l.update_idletasks()
+        self.tipwidth = l.winfo_width()
+        self.tipheight = l.winfo_height()
+        self.master.bind('<Enter>', self.delai)
+        self.master.bind('<Button-1>', self.efface)
+        self.master.bind('<Leave>', self.efface)
+    def delai(self, event):
+        self.action = self.master.after(self.tps, self.affiche)
+    def affiche(self):
+        self.update_idletasks()
+        posX = self.master.winfo_rootx() + self.master.winfo_width()
+        posY = self.master.winfo_rooty() + self.master.winfo_height()
+        if posX + self.tipwidth > self.winfo_screenwidth():
+            posX = posX - self.winfo_width() - self.tipwidth
+        if posY + self.tipheight > self.winfo_screenheight():
+            posY = posY - self.winfo_height() - self.tipheight
+        #~ print posX,print posY
+        self.geometry('+%d+%d'%(posX,posY))
+        self.deiconify()
+    def efface(self,event):
+        self.withdraw()
+        self.master.after_cancel(self.action)
 
 class Fen(Tk):
     def __init__(self):
@@ -105,8 +160,12 @@ class Fen(Tk):
         f = Frame(self)
         f.pack()
         Label(f, text=f"Solveur de Mastermind {VERSION}  ", font="Arial 18").pack(side="left")
-        Button(f, text="🗘", command=self.mise_a_jour).pack(side="left")
-        Button(f, text="ⓘ", command=self.a_propos).pack(side="left")
+        u = Button(f, text="🗘", command=self.mise_a_jour)
+        u.pack(side="left")
+        infoBulle(u, "Rechercher les mises à jour")
+        i = Button(f, text="ⓘ", command=self.a_propos)
+        i.pack(side="left")
+        infoBulle(i, "À propos")
         self.boutons = []
         self.but_f = Frame(self)
         self.but_f.pack()
@@ -142,12 +201,14 @@ class Fen(Tk):
         self.id_couleur = 0
         self.boutons_couleur[self.id_couleur].config(relief="sunken")
         b = Button(f, text="Modifier", width=10, height=2, command=self.bouton_couleur_modification)
-#        b.pack(side="left")
+        b.pack(side="left")
         
         Label(self).pack()
         Button(self, text="Voir les possibilités", command=self.valider, width=100, height=2, bg="light green").pack()
         self.doublons = IntVar(self)
-        Checkbutton(self, text="Autoriser les doublons.", variable=self.doublons).pack()
+        c = Checkbutton(self, text="Autoriser les doublons.", variable=self.doublons)
+        c.pack()
+        infoBulle(c, "La combinaison à trouver comporte-t-elle des couleurs qui se répètent ?")
         
         self.affiche = Label(self)
         self.affiche.pack()
@@ -155,26 +216,32 @@ class Fen(Tk):
         self.after(1000, fonction(self.mise_a_jour, False))
         
     def a_propos(self):
-        if askyesno("À propos du solveur de Mastermind", f"Ce solveur de mastermind a été créé par sev1527. Sa version actuelle est {VERSION}.\nSouhaitez-vous ouvrir le dépôt GitHub pour en apprendre plus ?"):
+        if askyesno("À propos du solveur de Mastermind", "Ce solveur de mastermind a été créé par sev1527.\nSouhaitez-vous ouvrir le dépôt GitHub pour en apprendre plus ?"):
             webbrowser.open("https://github.com/sev1527/mastermind_solveur")
         
     def mise_a_jour(self, manuel=True):
-        r = get("https://github.com/sev1527/mastermind_solveur/raw/main/donn%C3%A9es.json")
-        json = r.json()
-        print(json)
-        if VERSION < json["update"]["last"]:
-            if askyesno("Mise à jour", f"""La version {json["update"]["last"]} est disponible (vous avez {VERSION}).
+        try:
+            r = get("https://github.com/sev1527/mastermind_solveur/raw/main/donn%C3%A9es.json")
+            json = r.json()
+            print(json)
+            if VERSION < json["update"]["last"]:
+                if askyesno("Mise à jour", f"""La version {json["update"]["last"]} est disponible (vous avez {VERSION}).
+Nouveautés :
+{json["update"]["new"]}
+
 Souhaitez-vous ouvrir le dépôt GitHub pour l'installer ?"""):
-                webbrowser.open("https://github.com/sev1527/mastermind_solveur")
-        elif manuel:
-            showinfo("Mise à jour", "Aucune mise à jour disponible.")
+                    webbrowser.open("https://github.com/sev1527/mastermind_solveur")
+            elif manuel:
+                showinfo("Mise à jour", "Aucune mise à jour disponible.")
+        except ConnectionError:
+            if manuel:
+                showwarning("Échec", "Échec de la requête")
         
     def bouton_couleur_reception(self, l, nb):
         c = self.boutons_couleur[self.id_couleur]["bg"]
         self.boutons[l][nb].config(bg=c)
     
     def bouton_couleur_modification(self):
-        showwarning("Attention", "Cette fonction ne marche pas encore !")
         c = askcolor(color=couleurs[self.id_couleur])[1]
         tbg = (i["bg"] for i in self.boutons_couleur)
         if c in tbg:
@@ -210,12 +277,15 @@ Souhaitez-vous ouvrir le dépôt GitHub pour l'installer ?"""):
             self.suppr.destroy()
         except AttributeError:
             pass
+        convertir = {}
+        for b, c in zip(self.boutons_couleur, range(len(self.boutons_couleur))):
+            convertir[b["bg"]] = c
         entrees = []
         for b in self.boutons:
             if b[-1]["text"] == "O/n":
                 entrees.append([])
                 for b2 in b[0:-3]:
-                    entrees[-1].append(b2["bg"])
+                    entrees[-1].append(convertir[b2["bg"]])
                 for b2 in b[-3:-1]:
                     entrees[-1].append(int(b2["text"]))
         ret = calculer(entrees, self.doublons.get())
@@ -228,7 +298,9 @@ Essayez :""")
             f = Frame(self.suppr)
             f.pack()
             for c in p[0:-1]:
-                Label(f, text="      ", bg=c).pack(side="left")
+                l = Label(f, text="      ", bg=self.boutons_couleur[c]["bg"])
+                l.pack(side="left")
+                infoBulle(l, f"couleur {c+1}")
             Label(f, text=f"Score : {p[-1]}").pack(side="left")
 
 
