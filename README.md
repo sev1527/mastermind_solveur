@@ -23,7 +23,6 @@ src="https://github.com/sev1527/mastermind_solveur/blob/main/metadata/capture_do
 
 <h2>À venir (dans l'ordre d'apparition prévu)</h2>
 <ul>
-  <li>Les couleurs modifiables.</li>
-  <li>Des scores mieux comptabilisé (pour le moment, c'est un peu au petit bonheur la chance 😉).</l>
+  <li>Des scores mieux comptabilisé (pour le moment, c'est un peu au petit bonheur la chance 😉).</li>
   <li>L'ajout ou la suppression de lignes/colonnes possibles en cliquant sur un bouton.</li>
 </ul>
