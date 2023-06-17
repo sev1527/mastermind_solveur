@@ -11,7 +11,7 @@ import webbrowser
 from requests import get
 from copy import deepcopy
 
-VERSION = "1.2.1"
+VERSION = "1.2.2"
 
 combinaisons = []
 combinaisons_double = []
@@ -202,6 +202,10 @@ class Fen(Tk):
         self.boutons_couleur[self.id_couleur].config(relief="sunken")
         b = Button(f, text="Modifier", width=10, height=2, command=self.bouton_couleur_modification)
         b.pack(side="left")
+        infoBulle(b, "Modifier la couleur active")
+        b = Button(f, text="Réinit.", width=5, height=2, command=self.bouton_reinitialiser)
+        b.pack(side="left")
+        infoBulle(b, "Remettre toutes les couleurs à zéro.")
         
         Label(self).pack()
         Button(self, text="Voir les possibilités", command=self.valider, width=100, height=2, bg="light green").pack()
@@ -237,6 +241,15 @@ Souhaitez-vous ouvrir le dépôt GitHub pour l'installer ?"""):
         except ConnectionError:
             if manuel:
                 showwarning("Échec", "Échec de la requête")
+        
+    def bouton_reinitialiser(self):
+        if not askyesno("Réinitialiser", "Remettre l'affichage à zéro ?"):
+            return
+        for ligne in self.boutons:
+            for bouton in ligne[0:-3]:
+                bouton.config(bg=couleurs[0])
+        for bouton, c in zip(self.boutons_couleur, couleurs):
+            bouton.config(bg=c)
         
     def bouton_couleur_reception(self, l, nb):
         c = self.boutons_couleur[self.id_couleur]["bg"]
