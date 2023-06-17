@@ -63,7 +63,7 @@ def calculer(liste, double):
             nb_bons = 0
             decalage = 0
             copie_combinaison = deepcopy(combinaison)
-            copie_entree = deepcopy(entree)[0:len(combinaison)] # On ne prends que les chiffres de la combinaison.
+            copie_entree = deepcopy(entree)[0:len(combinaison)]
             for i in range(len(copie_combinaison)):
                 if copie_entree[i-decalage] == copie_combinaison[i-decalage]:
                     del copie_combinaison[i-decalage]
@@ -117,7 +117,7 @@ def fonction(f, *args, **kwargs):
 
 class infoBulle(Toplevel):
     """
-    Inspiré de https://www.developpez.net/forums/d241112/autres-langages/python/gui/tkinter/info-bulle-tkinter/#post_1542643.
+    Inspiré de https://www.developpez.net/forums/d241112/autres-langages/python/gui/tkinter/info-bulle-tkinter/#post_1542643
     """
     def __init__(self, master, texte='', temps=1000):
         super().__init__(master, bd=1, bg='black')
@@ -125,7 +125,7 @@ class infoBulle(Toplevel):
         self.master = master
         self.withdraw()
         self.overrideredirect(1)
-        self.transient()     
+        self.transient() 
         l = Label(self, text=texte, bg="ghost white", justify='left')
         l.update_idletasks()
         l.pack()
@@ -156,7 +156,7 @@ class Fen(Tk):
     def __init__(self):
         super().__init__()
         self.title("Solveur de Mastermind")
-        
+
         f = Frame(self)
         f.pack()
         Label(f, text=f"Solveur de Mastermind {VERSION}  ", font="Arial 18").pack(side="left")
@@ -174,41 +174,49 @@ class Fen(Tk):
             f.pack()
             self.boutons.append([])
             for b in range(4):
-                but = Button(f, text="\n", command=fonction(self.bouton_couleur_reception, l, b), bg=couleurs[0], width=5)
+                but = Button(f, text="\n", command=fonction(self.bouton_couleur_reception, l, b),
+                             bg=couleurs[0], width=5)
                 but.pack(side="left")
                 self.boutons[-1].append(but)
-            
+
             Label(f).pack(side="left")
-            but = Button(f, text="0", command=fonction(self.bouton_valeur, l, len(self.boutons[-1])), bg="white", height=2, width=5)
+            but = Button(f, text="0", bg="white", height=2, width=5,
+                         command=fonction(self.bouton_valeur, l, len(self.boutons[-1]))                         )
             but.pack(side="left")
             self.boutons[-1].append(but)
-            but = Button(f, text="0", command=fonction(self.bouton_valeur, l, len(self.boutons[-1])), bg="red", height=2, width=5)
+            but = Button(f, text="0", bg="red", height=2, width=5,
+                         command=fonction(self.bouton_valeur, l, len(self.boutons[-1])))
             but.pack(side="left")
             self.boutons[-1].append(but)
             Label(f).pack(side="left")
-            but = Button(f, text="o/N", command=fonction(self.bouton_activer, l, len(self.boutons[-1])), bg="red", height=2, width=5)
+            but = Button(f, text="o/N", bg="red", height=2, width=5,
+                         command=fonction(self.bouton_activer, l, len(self.boutons[-1])))
             but.pack(side="left")
             self.boutons[-1].append(but)
-        
+
         Label(self).pack()
         self.boutons_couleur = []
         f = Frame(self)
         f.pack()
         for i in range(8):
-            b = Button(f, text="\n", bg=couleurs[i], width=5, command=fonction(self.bouton_couleur_selection, i))
+            b = Button(f, text="\n", bg=couleurs[i], width=5,
+                       command=fonction(self.bouton_couleur_selection, i))
             b.pack(side="left")
             self.boutons_couleur.append(b)
         self.id_couleur = 0
         self.boutons_couleur[self.id_couleur].config(relief="sunken")
-        b = Button(f, text="Modifier", width=10, height=2, command=self.bouton_couleur_modification)
+        b = Button(f, text="Modifier", width=10, height=2,
+                   command=self.bouton_couleur_modification)
         b.pack(side="left")
         infoBulle(b, "Modifier la couleur active")
-        b = Button(f, text="Réinit.", width=5, height=2, command=self.bouton_reinitialiser)
+        b = Button(f, text="Réinit.", width=5, height=2,
+                   command=self.bouton_reinitialiser)
         b.pack(side="left")
         infoBulle(b, "Remettre toutes les couleurs à zéro.")
-        
+
         Label(self).pack()
-        Button(self, text="Voir les possibilités", command=self.valider, width=100, height=2, bg="light green").pack()
+        Button(self, text="Voir les possibilités", command=self.valider, width=100, height=2,
+               bg="light green").pack()
         self.doublons = IntVar(self)
         c = Checkbutton(self, text="Autoriser les doublons.", variable=self.doublons)
         c.pack()
@@ -218,11 +226,13 @@ class Fen(Tk):
         self.affiche.pack()
         
         self.after(1000, fonction(self.mise_a_jour, False))
-        
+
     def a_propos(self):
-        if askyesno("À propos du solveur de Mastermind", "Ce solveur de mastermind a été créé par sev1527.\nSouhaitez-vous ouvrir le dépôt GitHub pour en apprendre plus ?"):
+        if askyesno("À propos du solveur de Mastermind",
+                    """Ce solveur de mastermind a été créé par sev1527.
+Souhaitez-vous ouvrir le dépôt GitHub pour en apprendre plus ?"""):
             webbrowser.open("https://github.com/sev1527/mastermind_solveur")
-        
+
     def mise_a_jour(self, manuel=True):
         try:
             r = get("https://github.com/sev1527/mastermind_solveur/raw/main/donn%C3%A9es.json")
@@ -230,7 +240,8 @@ class Fen(Tk):
             print(json)
             n = "\n"
             if VERSION < json["update"]["last"]:
-                if askyesno("Mise à jour", f"""La version {json["update"]["last"]} est disponible (vous avez {VERSION}).
+                if askyesno("Mise à jour",
+                            f"""La version {json["update"]["last"]} est disponible (vous avez {VERSION}).
 Nouveautés :
 {''.join(f'- {i}{n}' for i in json["update"]["new"])}
 
@@ -241,7 +252,7 @@ Souhaitez-vous ouvrir le dépôt GitHub pour l'installer ?"""):
         except ConnectionError:
             if manuel:
                 showwarning("Échec", "Échec de la requête")
-        
+
     def bouton_reinitialiser(self):
         if not askyesno("Réinitialiser", "Remettre l'affichage à zéro ?"):
             return
@@ -267,7 +278,7 @@ Souhaitez-vous ouvrir le dépôt GitHub pour l'installer ?"""):
             for b in l:
                 if b["bg"] == ancienne:
                     b.config(bg=c)
-    
+
     def bouton_couleur_selection(self, nb):
         self.boutons_couleur[self.id_couleur].config(relief="raised")
         self.boutons_couleur[nb].config(relief="sunken")
@@ -285,7 +296,7 @@ Souhaitez-vous ouvrir le dépôt GitHub pour l'installer ?"""):
             self.boutons[l][nb].config(text="o/N", bg="red")
         else:
             self.boutons[l][nb].config(text="O/n", bg="#00E300")
-    
+
     def valider(self):
         try:
             self.suppr.destroy()
