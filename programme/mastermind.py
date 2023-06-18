@@ -4,14 +4,16 @@ Une fenêtre graphique pour résoudre les combinaisons de Mastermind.
 Créé par sev1527.
 Dépot GitHub : https://github.com/sev1527/mastermind_solveur
 """
-from tkinter import Tk, Button, Label, Frame, Checkbutton, IntVar, Toplevel
+from tkinter import Tk, Button, Label, Frame, Checkbutton, IntVar, Toplevel, PhotoImage, Canvas
 from tkinter.colorchooser import askcolor
 from tkinter.messagebox import showwarning, askyesno, showinfo
 import webbrowser
 from copy import deepcopy
 from requests import get
 
-VERSION = "1.2.3"
+VERSION = "1.3"
+SWITCH_BG = b'iVBORw0KGgoAAAANSUhEUgAAACMAAAAPCAYAAABut3YUAAABhWlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw0AcxV9TtSIVRQuKOASsTnZREcdSxSJYKG2FVh1MLv2CJg1Jiouj4Fpw8GOx6uDirKuDqyAIfoC4ujgpukiJ/0sKLWI9OO7Hu3uPu3eAUCsx1ewIA6pmGYloRExnVkXfK7owgH6MYUhiph5LLqbQdnzdw8PXuxDPan/uz9GrZE0GeETiMNMNi3iDeHbT0jnvEwdYQVKIz4knDbog8SPXZZffOOcdFnhmwEgl5okDxGK+heUWZgVDJZ4hDiqqRvlC2mWF8xZntVRhjXvyF/qz2kqS6zRHEcUSYohDhIwKiijBQohWjRQTCdqPtPGPOP44uWRyFcHIsYAyVEiOH/wPfndr5qan3CR/BOh8se2PccC3C9Srtv19bNv1E8D7DFxpTX+5Bsx9kl5tasEjoG8buLhuavIecLkDDD/pkiE5kpemkMsB72f0TRlg8BboWXN7a+zj9AFIUVfLN8DBITCRp+z1Nu/ubu3t3zON/n4AsDFyv15TgvoAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAHdElNRQfnBhIRACZ9LKeUAAAAGXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAAAiFJREFUSMftlc9Lk3Ecx197nmebe1pzLrdniQwa5mK0WUvcIYTo0kFCD4NACKG7IAT+A90jQdrJLvPkJcSLBEGHjrbHaozlyg6b2NzUkXO/t6dD8Ii0g0OIoj6n95fP9/P9vvh833y+hkfanMY544XhGVo4fN5jEPiD4t+GWSsUGNnYYDmXO6UBpN8N8zST4VUwiMtk4q6q6voXmOLWAYmoSmEzx1DkGr6Z6xitJsrfjkk8j3PRYyO9ksIZUrjxeAyLU+544Va5THRnh81SiYjLxYzbjVUUeZhM8qZex62q+l63qpIKBPDJ8skz1Q6rvJ17TXD2FvfXH2BxX+DjYlwvSjx5hyPgZGItgjJ2mS8rqY4gh80mc+k0s4ODrI+M4DaZWMxmAYj5/dw2GimNjqKFw7r2yfJpzxwkCwxP+7F57YhmkSuTV/kUS9Ao1QFQJgZRwgOIZhElPEDx82FHmOTxMdOKgtdiwSwITPb3E8vnKbVaZzdwdb+CxXXSdkEScIYUGkc/YWxeu54ziAJaq/N42m80dA8ASAYDIVnmqBsYs72Hyl5ZT7SbbfLxHJJs7Mqgdklir17X101NI14uIwvC2WEuBZwkl97zfbtIq9bi62oa79Qwpl5zVzABq5Wl3V22KxVq7TarhQJTDge9ktRFZ/p6uBO9x4eFDV6OL1PKHHFzvvsR3ydJRH0+FrJZxlWVTLXKvMdzplrD/7/pb4D5AbXOw0DY3yi5AAAAAElFTkSuQmCC'
+SWITCH_FG = b'iVBORw0KGgoAAAANSUhEUgAAABEAAAAPCAYAAAACsSQRAAABhWlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw0AcxV9TtSIVRQuKOASsTnZREcdSxSJYKG2FVh1MLv2CJg1Jiouj4Fpw8GOx6uDirKuDqyAIfoC4ujgpukiJ/0sKLWI9OO7Hu3uPu3eAUCsx1ewIA6pmGYloRExnVkXfK7owgH6MYUhiph5LLqbQdnzdw8PXuxDPan/uz9GrZE0GeETiMNMNi3iDeHbT0jnvEwdYQVKIz4knDbog8SPXZZffOOcdFnhmwEgl5okDxGK+heUWZgVDJZ4hDiqqRvlC2mWF8xZntVRhjXvyF/qz2kqS6zRHEcUSYohDhIwKiijBQohWjRQTCdqPtPGPOP44uWRyFcHIsYAyVEiOH/wPfndr5qan3CR/BOh8se2PccC3C9Srtv19bNv1E8D7DFxpTX+5Bsx9kl5tasEjoG8buLhuavIecLkDDD/pkiE5kpemkMsB72f0TRlg8BboWXN7a+zj9AFIUVfLN8DBITCRp+z1Nu/ubu3t3zON/n4AsDFyv15TgvoAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAHdElNRQfnBhIRARJFg2JgAAAAGXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAAAURJREFUOMuNk9GSgyAMRU8Q7QyF+p3dv+/gusVOyT6AqJ3ZbvMSkCTee5PI1/WqCogIKCCAKogACiogm1eV8tTewIbLhXe21n1n9uw98lfo/rNSEO2j68GGswcDqBQmUsK0Zu/PqCJIo6wC+ZmxpjMMw0BnO4wYPrWcM4/Hwj0nWlZnOk6nE957QgiEELjdbnjviw+BEDzOOfqhR8RAwYVV2DpRuzQMA7bvAQghAHB2jmV5kHPaOlbNAIjWdlUVCrIC0jnXiq+JgpYO1zqmYTjW4JkzAD/zXDXdWtVEF1AV7EpDV58zaVlYUgIgThMA3/N8nEPWi2K10tCspJRINRlgHEdijIzjyBQjm3I7ZApWNXNPCVKqf9JG6zApW07Vr00Pdqpw9wP6Mpf8txeHIh8vy+vuxBiPK9KE27Z0Fb5QOu6OAr/VG6nSwUWKFwAAAABJRU5ErkJggg=='
 
 combinaisons = []
 combinaisons_double = []
@@ -110,7 +112,7 @@ def fonction(fonct, *args, **kwargs):
     """
     Transforme une fonction en lambda.
     """
-    def retour():
+    def retour(*_):
         fonct(*args, **kwargs)
     return retour
 
@@ -152,6 +154,7 @@ class InfoBulle(Toplevel):
         self.withdraw()
         self.master.after_cancel(self.action)
 
+
 class Fen(Tk):
     """
     La fenêtre principale du programme.
@@ -159,6 +162,10 @@ class Fen(Tk):
     def __init__(self):
         super().__init__()
         self.title("Solveur de Mastermind")
+        self.images = {
+            "switch_bg": PhotoImage(data=SWITCH_BG),
+            "switch_fg": PhotoImage(data=SWITCH_FG),
+        }
 
         frame = Frame(self)
         frame.pack()
@@ -183,19 +190,26 @@ class Fen(Tk):
                 self.boutons[-1].append(bouton)
 
             Label(frame).pack(side="left")
-            bouton = Button(frame, text="0", bg="white", height=2, width=5,
-                         command=fonction(self.bouton_valeur, ligne, len(self.boutons[-1])))
-            bouton.pack(side="left")
-            self.boutons[-1].append(bouton)
-            bouton = Button(frame, text="0", bg="red", height=2, width=5,
-                         command=fonction(self.bouton_valeur, ligne, len(self.boutons[-1])))
-            bouton.pack(side="left")
-            self.boutons[-1].append(bouton)
+            for couleur in ["white", "red"]:
+                bouton = Button(frame, text="0", bg=couleur, height=2, width=5,
+                             command=fonction(self.bouton_valeur, ligne, len(self.boutons[-1])))
+                bouton.pack(side="left")
+                self.boutons[-1].append(bouton)
+            
             Label(frame).pack(side="left")
-            bouton = Button(frame, text="o/N", bg="red", height=2, width=5,
-                         command=fonction(self.bouton_activer, ligne, len(self.boutons[-1])))
-            bouton.pack(side="left")
-            self.boutons[-1].append(bouton)
+            switch = Canvas(frame, height=self.images["switch_bg"].height(),
+                                   width=self.images["switch_bg"].width())
+            switch.create_image(self.images["switch_bg"].width()//2+1,
+                                self.images["switch_bg"].height()//2+1,
+                                image=self.images["switch_bg"])
+#                         command=fonction(self.bouton_activer, ligne, len(self.boutons[-1])))
+            switch.bind("<Button>", fonction(self.bouton_activer, ligne, len(self.boutons[-1])))
+            switch.state = False
+            switch.affiche = switch.create_image(self.images["switch_fg"].width()//2+1,
+                                                 self.images["switch_fg"].height()//2+1,
+                                                 image=self.images["switch_fg"])
+            switch.pack(side="left")
+            self.boutons[-1].append(switch)
 
         Label(self).pack()
         self.boutons_couleur = []
@@ -231,7 +245,7 @@ class Fen(Tk):
         self.suppr = Label(self, text="Effectuez une recherche.")
         self.suppr.pack()
 
-        self.after(1000, fonction(self.mise_a_jour, False))
+        self.after(100, fonction(self.mise_a_jour, False))
 
     def a_propos(self):
         """
@@ -326,11 +340,21 @@ Souhaitez-vous ouvrir le dépôt GitHub pour l'installer ?"""):
         """
         Bouton pour activer/désactiver une ligne pressé.
         """
-        ancien = self.boutons[ligne][colonne]["text"]
-        if ancien == "O/n":
-            self.boutons[ligne][colonne].config(text="o/N", bg="red")
+        self.boutons[ligne][colonne].state = not self.boutons[ligne][colonne].state
+        if self.boutons[ligne][colonne].state:
+            self._bouton_activer_animation(ligne, colonne, 1, 1,
+                                           self.images["switch_bg"].width()//2+1)
         else:
-            self.boutons[ligne][colonne].config(text="O/n", bg="#00E300")
+            self._bouton_activer_animation(ligne, colonne, 1+self.images["switch_bg"].width()//2+1, -1,
+                                           self.images["switch_bg"].width()//2+1)
+
+    def _bouton_activer_animation(self, ligne, colonne, position, operation, restant):
+        if not restant:
+            return
+        nombre = self.boutons[ligne][colonne].affiche
+        self.boutons[ligne][colonne].moveto(nombre, position+operation, 1)
+        self.after(5, fonction(self._bouton_activer_animation, ligne, colonne, position+operation,
+                                                                operation, restant-1))
 
     def valider(self):
         """
@@ -342,7 +366,7 @@ Souhaitez-vous ouvrir le dépôt GitHub pour l'installer ?"""):
             convertir[bouton["bg"]] = couleur
         entrees = []
         for bouton in self.boutons:
-            if bouton[-1]["text"] == "O/n":
+            if bouton[-1].state:
                 entrees.append([])
                 for bouton2 in bouton[0:-3]:
                     entrees[-1].append(convertir[bouton2["bg"]])
